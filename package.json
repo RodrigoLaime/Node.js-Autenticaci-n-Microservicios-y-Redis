@@ -1,0 +1,30 @@
+{
+  "name": "node.js-autenticaci-n-microservicios-y-redis",
+  "version": "1.0.0",
+  "description": "Curso de Node.js: Autenticación, Microservicios y Redis = curso 33",
+  "main": "index.js",
+  "scripts": {
+    "start": "node api/index.js",
+    "dev": "nodemon api/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RodrigoLaime/Node.js-Autenticaci-n-Microservicios-y-Redis.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RodrigoLaime/Node.js-Autenticaci-n-Microservicios-y-Redis/issues"
+  },
+  "homepage": "https://github.com/RodrigoLaime/Node.js-Autenticaci-n-Microservicios-y-Redis#readme",
+  "dependencies": {
+    "bcrypt": "^5.1.0",
+    "body-parser": "^1.20.1",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.0",
+    "nanoid": "^3.3.4",
+    "swagger-ui-express": "^4.6.0"
+  }
+}
