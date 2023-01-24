@@ -29,7 +29,9 @@ function handleCon() {
     console.error('[db err]', err);
     if (err.code === 'PROTOCOL_CONNECTION_LOST') {//si se perdio la connection 
       handleCon();//lo vuelve a conectar 
-    } else {
+    } /* else if (err.code === "PROTOCOL_ENQUEUE_AFTER_FATAL_ERROR") {
+      handleCon();
+    }  */else {
       throw err;
     }
   })
@@ -66,25 +68,35 @@ function insert(table, data) {
 
 function update(table, data) {
   return new Promise((resolve, reject) => {
-    connection.query(`UPDATE ${table} SET ? WHERE id=?`, [data, data.id], (err, result) => {
+    connection.query(`UPDATE ${table} SET ? WHERE id= ?`, [data, data.id], (err, result) => {
       if (err) return reject(err);
       resolve(result);
     })
   })
 }
 
+const upsert = async (table, data) => {
+  let row = [];
+  if (data.id) {
+    row = await get(table, data.id)
+  }
 
-function upsert(table, data) {
-  if (data && data.id) {
-    return update(table, data);
-  } else {
+  if (row.length === 0) {
     return insert(table, data);
+  } else {
+    return update(table, data);
   }
 }
 
-function query(table, query) {
+function query(table, query, join) {
+  let joinQuery = '';
+  if (join) {
+    const key = Object.keys(join)[0];
+    const val = join[key];
+    joinQuery = `JOIN ${key} ON ${table}.${val} = ${key}.id`;
+  }
   return new Promise((resolve, reject) => {
-    connection.query(`SELECT * FROM ${table} WHERE ?`, query, (err, res) => {
+    connection.query(`SELECT * FROM ${table} ${joinQuery} WHERE ${table}.?`, query, (err, res) => {
       if (err) return reject(err);
       resolve(res[0] || null);
     })
